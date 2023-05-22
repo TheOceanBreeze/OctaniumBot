@@ -16,18 +16,18 @@ class interactionCreate {
 			author: "Aisuruneko",
 			version: "1.0.0"
 		};
-	}
+	};
 
 	add = (fun) => {
 		this.functions.push(fun);
-	}
+	};
 
 	run = (app, params) => {
 		this.default(app, params); // Run default function
-		for (var i = 0; i < this.functions.length; i++) {
-			this.functions[i](app, params);
-		};
-	}
+		for (let func of this.functions) {
+			this.functions[func](app, params);
+		}
+	};
 
 	default = async(app, params) => {
 		const interaction = params[0];
@@ -40,9 +40,9 @@ class interactionCreate {
 			} catch (Ex) {
 				interaction.reply(`Something went wrong! - ${Ex.message}`);
 				console.log(Ex);
-			};
-		};
-	}
+			}
+		}
+	};
 }
 
-module.exports = function() { return new interactionCreate() }
+module.exports = function() { return new interactionCreate(); };

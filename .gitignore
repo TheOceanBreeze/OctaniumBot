@@ -8,6 +8,9 @@
 # Let's not forget about node_modules.
 node_modules/
 
+# and the .env file
+.env
+
 ## -- THECODINGBOT RELATED IGNORES --
 src/app/cache/*
 

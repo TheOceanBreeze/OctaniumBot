@@ -5,7 +5,7 @@
 // https://codingbot.gg
 
 module.exports = {
-	footerText: "© Netro Corporation 2018-%currentYear%.", // The bottom text added the bottom of embeds.
+	footerText: "ⓒ Netro Corporation 2018-%currentYear%, Ⓒ Octanium %currentYear%.", // The bottom text added the bottom of embeds.
 	defaultLanguage: "English (en_US)", // The bot's default language (for new users).
 	rotatingStatus: { // The RPS (Rotating Playing Status) changes the bot's activity every x seconds.
 		enabled: true, // Should this feature be enabled?
@@ -48,8 +48,6 @@ module.exports = {
 
 			{ name: "discord.js", required: true },
 			{ name: "canvas", required: false },
-
-			{ name: "sequelize", required: true }
 		],
 
 		embedColors: {

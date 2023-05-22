@@ -31,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/NetroCorp/TheCodingBot/issues"
   },
-  "homepage": "https://tcb.netrocorp.net"
+  "homepage": "https://tcb.netrocorp.net",
+  "devDependencies": {
+    "eslint": "^8.41.0"
+  }
 }

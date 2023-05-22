@@ -10,11 +10,11 @@ class main {
 	}
 	sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)); };
 	clearCache = (mod) => {
-		if (!mod) Object.keys(require.cache).forEach(function(key) { delete require.cache[key] });
+		if (!mod) Object.keys(require.cache).forEach(function(key) { delete require.cache[key]; });
 		else delete require.cache[mod];
 	};
 
-	getID = (string) => { return string.replace(/[<#@&!>]/g, ''); };
+	getID = (string) => { return string.replace(/[<#@&!>]/g, ""); };
 	getTicks = () => { return ((new Date().getTime() * 10000) + 621355968000000000); };
 
 	attachmentGrabber = (attachment) => {
@@ -24,7 +24,7 @@ class main {
 		return (image) ? attachment : "";
 	};
 	removeFromArr = (arr, value) => { return arr.filter(e => e !== value); };
-	isAnimated = (str) => { return str.substring(0, 2) === 'a_'; };
+	isAnimated = (str) => { return str.substring(0, 2) === "a_"; };
 
 	fetchFromAPI = (APIType, endpointURL) => {
 		if (!APIType || !endpointURL) return "Missing argument " + (!APIType ? "APIType" : "endpointURL") + "!";
@@ -34,14 +34,14 @@ class main {
 		else if (APIType == 2) baseURL = "https://api.github.com";
 		else return "APIType unknown.";
 
-		return new Promise(async(resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			let response = null;
 			try {
-				response = await this.app.dependencies["node-fetch"](baseURL + endpointURL);
+				response = this.app.dependencies["node-fetch"](baseURL + endpointURL);
 				if (response.status != 200) throw new Error("Server returned HTTP Status " + response.status);
 				resolve({
 					status: "OK",
-					data: await response.json(),
+					data: response.json(),
 					response
 				});
 			} catch (err) {
@@ -50,9 +50,9 @@ class main {
 					error: err.message,
 					response
 				});
-			};
+			}
 		});
-	}
-};
+	};
+}
 
-module.exports = function(app) { return new main(app) }
+module.exports = function(app) { return new main(app); };

@@ -49,13 +49,13 @@ class Logger {
 			`${locationColor}${location}${logColors.Reset}: ` +
 			msg
 		);
-	}
+	};
 
-	error = (from, msg) => { this.genMsg("ERROR", from, msg); }
-	info = (from, msg) => { this.genMsg("INFO", from, msg); }
-	warn = (from, msg) => { this.genMsg("WARN", from, msg); }
-	success = (from, msg) => { this.genMsg("SUCCESS", from, msg); }
+	error = (from, msg) => { this.genMsg("ERROR", from, msg); };
+	info = (from, msg) => { this.genMsg("INFO", from, msg); };
+	warn = (from, msg) => { this.genMsg("WARN", from, msg); };
+	success = (from, msg) => { this.genMsg("SUCCESS", from, msg); };
 	debug = (from, msg) => { if (this.app.debugMode) this.genMsg("DEBUG", from, msg); };
 }
 
-module.exports = function(app) { return new Logger(app) }
+module.exports = function(app) { return new Logger(app); };

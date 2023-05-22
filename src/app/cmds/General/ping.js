@@ -23,16 +23,12 @@ class command {
 				DEFAULT_MEMBER_PERMISSIONS: ["SendMessages"]
 			}
 		};
-	}
+	};
 
 	slashRun = async(app, interaction) => {
 		await interaction.reply(this.execute(app));
-	}
-
-	messageRun = async(app, message) => {
-		await message.reply(this.execute(app));
-	}
-
+	};
+	
 	execute = (app) => {
 		let eFields = [];
 		let data = [((app.client.shard) ? app.client.shard.ids : 0), app.client.ws.status, app.client.guilds.cache.size, app.client.ws.ping],
@@ -62,7 +58,7 @@ class command {
 				footer: { text: app.footerText }
 			}]
 		};
-	}
+	};
 }
 
-module.exports = function() { return new command() }
+module.exports = function() { return new command(); };

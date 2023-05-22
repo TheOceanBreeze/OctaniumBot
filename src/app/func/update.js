@@ -32,22 +32,22 @@ class updateChecker {
 
 				if (yourVer.replaceAll(".", "") < latestVer.replaceAll(".", "")) isUpdate = 1;
 
-				if (isUpdate == 1) this.app.log.info("SYSTEM", `There is a new update!\n${verString}`)
-				else return this.app.log.info("SYSTEM", `No updates! You're running the latest version!`);
+				if (isUpdate == 1) this.app.log.info("SYSTEM", `There is a new update!\n${verString}`);
+				else return this.app.log.info("SYSTEM", "No updates! You're running the latest version!");
 			}).catch((response) => { this.app.log.error("SYSTEM", `Something went wrong while checking for updates! ${(response.message) ? response.message : response.error}`); });
 		} catch (Ex) {
 			this.app.log.error("SYSTEM", `Something went wrong while checking for updates! ${Ex.message}`);
-		};
-	}
+		}
+	};
 
 	init = async(checkNow = true) => {
 		if (process.env.UPDATER_CHECK_ENABLED != "true") return;
 		this.timer = setInterval(() => this.checkUpdates(), ((process.env.UPDATER_CHECK_FREQ) * 1000));
 		if (checkNow) await this.checkUpdates(); // Go ahead and check now!
-	}
+	};
 
 	stop = () => clearInterval(this.timer);
 
 }
 
-module.exports = function(app) { return new updateChecker(app) }
+module.exports = function(app) { return new updateChecker(app); };

@@ -30,15 +30,15 @@ class command {
 				DEFAULT_MEMBER_PERMISSIONS: ["SendMessages"]
 			}
 		};
-	}
+	};
 
 	slashRun = async(app, interaction) => {
 		await interaction.reply(await this.execute(app, interaction.user.toString(), interaction.guild.members.cache.get(interaction.options.get("user").value).user.toString()));
-	}
+	};
 
 	messageRun = async(app, message, args) => {
 		await message.reply(await this.execute(app, message.author.toString(), args[0]));
-	}
+	};
 
 	execute = (app, executor, target) => {
 		if (!target) return { content: `Specify someone to ${this.meta().name}!`};
@@ -60,7 +60,7 @@ class command {
 				}]
 			};
 		});
-	}
+	};
 }
 
-module.exports = function() { return new command() }
+module.exports = function() { return new command(); };

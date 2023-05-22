@@ -39,18 +39,15 @@ const start = async(debugMode) => {
 				let missingMod = Ex.message.includes("Cannot find module");
 				if (missingMod) { app.log.error("SYSTEM", `Could not import module - ${dependency.name}!`); }
 				else console.log(Ex);
-				if (dependency.required || !missingMod) { process.exit(-1); };
-			};
-		};
-	};
+				if (dependency.required || !missingMod) { process.exit(-1); }
+			}
+		}
+	}
 	const { Client, GatewayIntentBits, Partials, Collection, PermissionsBitField } = app.dependencies["discord.js"];
 
 	// Import functions
 	app.functions.updateChecker = require(`${botDirectory}/func/update.js`)(app);
 	await app.functions.updateChecker.init();
-
-	app.functions.database = require(`${botDirectory}/func/database.js`)(app);
-	await app.functions.database.init();
 
 	// Load client
 	app.log.info("SYSTEM", "Configuring Discord Client...");
@@ -75,7 +72,7 @@ const start = async(debugMode) => {
 	app.log.info("SYSTEM", "Importing events...");
 	app.events = new Collection();
 	app.dependencies.fs.readdirSync(`${botDirectory}/evts/`).forEach(dir => {
-		const events = app.dependencies.fs.readdirSync(`${botDirectory}/evts/${dir}`).filter(file => file.endsWith('.js'));
+		const events = app.dependencies.fs.readdirSync(`${botDirectory}/evts/${dir}`).filter(file => file.endsWith(".js"));
 		for (let file of events) {
 			const startImport = new Date().getTime(),
 				fileLocation = `${botDirectory}/evts/${dir}/${file}`;
@@ -90,8 +87,8 @@ const start = async(debugMode) => {
 			} catch (Ex) {
 				app.log.error("SYSTEM", `Could not load event - ${file}!`);
 				console.log(Ex);
-			};
-		};
+			}
+		}
 	});
 
 	// Import mods
@@ -103,7 +100,7 @@ const start = async(debugMode) => {
 				fileLocation = `${botDirectory}/mods/${mod.file}`;
 			let missingMod = false;
 			if (mod.dependencies) { // Looks like this module requires some more dependencies!
-				for (var i = 0; i < mod.dependencies.length; i++) {
+				for (i = 0; i < mod.dependencies.length; i++) {
 					const startImport = new Date().getTime();
 					let dependency = mod.dependencies[i];
 					try {
@@ -117,10 +114,10 @@ const start = async(debugMode) => {
 						if (dependency.required || !missingMod) {
 							app.log.warn("SYSTEM", `Dependency import failed for ${mod.name}. This module will be diasbled.`);
 							break;
-						};
-					};
-				};
-			};
+						}
+					}
+				}
+			}
 			if (missingMod) continue;
 
 			try {
@@ -132,12 +129,12 @@ const start = async(debugMode) => {
 			} catch (Ex) {
 				app.log.error("SYSTEM", `Could not load module - ${mod.name}!`);
 				console.log(Ex);
-			};
-		};
+			}
+		}
 	} catch (Ex) {
-		app.log.error("SYSTEM", `Could not load modules (is the file there and JSON is parsing correctly?).`);
+		app.log.error("SYSTEM", "Could not load modules (is the file there and JSON is parsing correctly?).");
 		if (!Ex.message.includes("Cannot find module") && !Ex.message.includes("modules.json")) console.log(Ex);
-	};
+	}
 
 	// Import commands
 	app.log.info("SYSTEM", "Importing commands...");
@@ -148,7 +145,7 @@ const start = async(debugMode) => {
 	};
 	
 	app.dependencies.fs.readdirSync(`${botDirectory}/cmds/`).forEach(dir => {
-		const commands = app.dependencies.fs.readdirSync(`${botDirectory}/cmds/${dir}`).filter(file => file.endsWith('.js'));
+		const commands = app.dependencies.fs.readdirSync(`${botDirectory}/cmds/${dir}`).filter(file => file.endsWith(".js"));
 		for (let file of commands) {
 			const startImport = new Date().getTime(),
 				fileLocation = `${botDirectory}/cmds/${dir}/${file}`;
@@ -167,17 +164,17 @@ const start = async(debugMode) => {
 						default_member_permissions: commandMeta.permissions.DEFAULT_MEMBER_PERMISSIONS ? PermissionsBitField.resolve(commandMeta.permissions.DEFAULT_MEMBER_PERMISSIONS).toString() : null,
 					});
 					app.log.debug("SYSTEM", `Imported slash command - ${commandMeta.name} in ${new Date().getTime() - startImport}ms.`);
-				};
+				}
 				if (process.env.COMMANDS_PREFIX_ENABLED == "true" && commandMeta.supportsPrefix) {
 					app.commands.prefix.set(commandMeta.name, command);
 					app.log.debug("SYSTEM", `Imported prefix command - ${commandMeta.name} in ${new Date().getTime() - startImport}ms.`);
-				};
+				}
 
 			} catch (Ex) {
 				app.log.error("SYSTEM", `Could not load command - ${file}!`);
 				console.log(Ex);
-			};
-		};
+			}
+		}
 	});
 
 	// Login now!!
@@ -189,5 +186,5 @@ const start = async(debugMode) => {
 	});
 
 };
-module.exports = function(debugMode) { return start(debugMode) }
-if (require.main === module) { console.log("\x1b[31mPlease call index.js.\x1b[0m"); };
+module.exports = function(debugMode) { return start(debugMode); };
+if (require.main === module) { console.log("\x1b[31mPlease call index.js.\x1b[0m"); }
