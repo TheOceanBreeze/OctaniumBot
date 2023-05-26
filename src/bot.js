@@ -25,9 +25,9 @@ const start = async(debugMode) => {
 	if (app.system.dependencies) {
 		app.log.info("SYSTEM", "Importing dependencies...");
 		if (!app.dependencies) app.dependencies = {};
-		for (var i = 0; i < app.system.dependencies.length; i++) {
+		for (let dep in app.system.dependencies) {
 			const startImport = new Date().getTime();
-			let dependency = app.system.dependencies[i];
+			let dependency = app.system.dependencies[dep];
 			try {
 				app.functions.clearCache(dependency.name);
 				app.dependencies[dependency.name] = await require(dependency.name);
@@ -46,7 +46,7 @@ const start = async(debugMode) => {
 	const { Client, GatewayIntentBits, Partials, Collection, PermissionsBitField } = app.dependencies["discord.js"];
 
 	// Import functions
-	app.functions.updateChecker = require(`${botDirectory}/func/update.js`)(app);
+	app.functions.updateChecker = await require(`${botDirectory}/func/update.js`)(app);
 	await app.functions.updateChecker.init();
 
 	// Load client
