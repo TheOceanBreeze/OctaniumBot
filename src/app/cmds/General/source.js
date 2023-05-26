@@ -34,7 +34,7 @@ class command {
 			embeds: [{
 				title: "Octanium Bot",
 				color: app.system.embedColors.blue,
-				description: "OctaniumBot is also made possible by those on the GitHub (thanks!)\nYou can obtain the source code and contribute at [here](https://github.com/TheOceanBreeze/OctaniumBot).",
+				description: "OctaniumBot is made possible by NetroCorp, as well as those on the GitHub (thanks!)\nYou can obtain the source code and contribute at [here](https://github.com/octaniumdev/OctaniumBot).",
 				footer: { text: app.footerText }
 			}]
 		};
