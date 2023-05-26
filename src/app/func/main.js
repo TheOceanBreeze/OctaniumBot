@@ -25,34 +25,6 @@ class main {
 	};
 	removeFromArr = (arr, value) => { return arr.filter(e => e !== value); };
 	isAnimated = (str) => { return str.substring(0, 2) === "a_"; };
-
-	fetchFromAPI = (APIType, endpointURL) => {
-		if (!APIType || !endpointURL) return "Missing argument " + (!APIType ? "APIType" : "endpointURL") + "!";
-		let baseURL = "";
-
-		if (APIType == 1) baseURL = "https://api.netrocorp.net/v1";
-		else if (APIType == 2) baseURL = "https://api.github.com";
-		else return "APIType unknown.";
-
-		return new Promise((resolve, reject) => {
-			let response = null;
-			try {
-				response = this.app.dependencies["node-fetch"](baseURL + endpointURL);
-				if (response.status != 200) throw new Error("Server returned HTTP Status " + response.status);
-				resolve({
-					status: "OK",
-					data: response.json(),
-					response
-				});
-			} catch (err) {
-				reject({
-					status: "NOT OK",
-					error: err.message,
-					response
-				});
-			}
-		});
-	};
 }
 
 module.exports = function(app) { return new main(app); };
