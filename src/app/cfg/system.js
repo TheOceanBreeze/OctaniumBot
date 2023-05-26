@@ -19,7 +19,7 @@ module.exports = {
 	version: {
 		major: 6,
 		minor: 0,
-		revision: 0,
+		revision: 1,
 		type: "ALPHA",
 
 		toString: function() {

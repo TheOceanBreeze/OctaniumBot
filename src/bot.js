@@ -25,12 +25,12 @@ const start = async(debugMode) => {
 	if (app.system.dependencies) {
 		app.log.info("SYSTEM", "Importing dependencies...");
 		if (!app.dependencies) app.dependencies = {};
-		for (var i = 0; i < app.system.dependencies.length; i++) {
+		for (let dep in app.system.dependencies) {
 			const startImport = new Date().getTime();
-			let dependency = app.system.dependencies[i];
+			let dependency = app.system.dependencies[dep];
 			try {
 				app.functions.clearCache(dependency.name);
-				app.dependencies[dependency.name] = require(dependency.name);
+				app.dependencies[dependency.name] = await require(dependency.name);
 				app.log.debug("SYSTEM", `Imported dependency - ${dependency.name} in ${new Date().getTime() - startImport}ms.`);
 
 				// Additional configuration for some modules if needed
@@ -46,7 +46,7 @@ const start = async(debugMode) => {
 	const { Client, GatewayIntentBits, Partials, Collection, PermissionsBitField } = app.dependencies["discord.js"];
 
 	// Import functions
-	app.functions.updateChecker = require(`${botDirectory}/func/update.js`)(app);
+	app.functions.updateChecker = await require(`${botDirectory}/func/update.js`)(app);
 	await app.functions.updateChecker.init();
 
 	// Load client
@@ -71,14 +71,14 @@ const start = async(debugMode) => {
 	// Import events
 	app.log.info("SYSTEM", "Importing events...");
 	app.events = new Collection();
-	app.dependencies.fs.readdirSync(`${botDirectory}/evts/`).forEach(dir => {
+	app.dependencies.fs.readdirSync(`${botDirectory}/evts/`).forEach(async dir => {
 		const events = app.dependencies.fs.readdirSync(`${botDirectory}/evts/${dir}`).filter(file => file.endsWith(".js"));
 		for (let file of events) {
 			const startImport = new Date().getTime(),
 				fileLocation = `${botDirectory}/evts/${dir}/${file}`;
 			app.functions.clearCache(fileLocation);
 			try {
-				let event = require(fileLocation)();
+				let event = await require(fileLocation)();
 				const eventMeta = event.meta();
 				if (eventMeta.type == "rest") app.client.rest.on(eventMeta.name, (...args) => event.run(app, args));
 				else app.client.on(eventMeta.name, (...args) => event.run(app, args));
@@ -100,12 +100,12 @@ const start = async(debugMode) => {
 				fileLocation = `${botDirectory}/mods/${mod.file}`;
 			let missingMod = false;
 			if (mod.dependencies) { // Looks like this module requires some more dependencies!
-				for (i = 0; i < mod.dependencies.length; i++) {
+				for (let dep of mod.dependencies) {
 					const startImport = new Date().getTime();
-					let dependency = mod.dependencies[i];
+					let dependency = mod.dependencies[dep];
 					try {
-						app.functions.clearCache(dependency.name);
-						app.dependencies[dependency.name] = require(dependency.name);
+						await app.functions.clearCache(dependency.name);
+						app.dependencies[dependency.name] = await require(dependency.name);
 						app.log.debug("SYSTEM", `Imported dependency - ${dependency.name} for ${mod.name} in ${new Date().getTime() - startImport}ms.`);
 					} catch (Ex) {
 						missingMod = Ex.message.includes("Cannot find module");
@@ -123,7 +123,7 @@ const start = async(debugMode) => {
 			try {
 				app.functions.clearCache(fileLocation);
 				let modData = require(fileLocation)(app);
-				await modData.init();
+				modData.init();
 
 				app.log.debug("SYSTEM", `Imported module - ${mod.name} in ${new Date().getTime() - startImport}ms`);
 			} catch (Ex) {
@@ -144,7 +144,7 @@ const start = async(debugMode) => {
 		slash_data: []
 	};
 	
-	app.dependencies.fs.readdirSync(`${botDirectory}/cmds/`).forEach(dir => {
+	app.dependencies.fs.readdirSync(`${botDirectory}/cmds/`).forEach(async dir => {
 		const commands = app.dependencies.fs.readdirSync(`${botDirectory}/cmds/${dir}`).filter(file => file.endsWith(".js"));
 		for (let file of commands) {
 			const startImport = new Date().getTime(),
@@ -154,8 +154,8 @@ const start = async(debugMode) => {
 				let command = require(fileLocation)();
 				const commandMeta = command.meta();
 				if (process.env.COMMANDS_SLASH_ENABLED == "true" && commandMeta.supportsSlash) {
-					app.commands.slash.set(commandMeta.name, command);
-					app.commands.slash_data.push({
+					await app.commands.slash.set(commandMeta.name, command);
+					await app.commands.slash_data.push({
 						name: commandMeta.name,
 						type: commandMeta.type || 1,
 						description: commandMeta.description,
@@ -166,7 +166,7 @@ const start = async(debugMode) => {
 					app.log.debug("SYSTEM", `Imported slash command - ${commandMeta.name} in ${new Date().getTime() - startImport}ms.`);
 				}
 				if (process.env.COMMANDS_PREFIX_ENABLED == "true" && commandMeta.supportsPrefix) {
-					app.commands.prefix.set(commandMeta.name, command);
+					await app.commands.prefix.set(commandMeta.name, command);
 					app.log.debug("SYSTEM", `Imported prefix command - ${commandMeta.name} in ${new Date().getTime() - startImport}ms.`);
 				}
 

@@ -30,7 +30,7 @@ class ready {
 	};
 
 	default = async(app) => {
-		app.footerText = app.footerText.replaceAll("%currentYear%", new Date().getFullYear());
+		app.footerText = await app.footerText.replaceAll("%currentYear%", new Date().getFullYear());
 		app.log.success("DISCORD", `Logged in as ${app.client.user.tag}`);
 
 		const { Routes, REST } = app.dependencies["discord.js"];
