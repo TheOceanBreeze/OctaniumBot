@@ -32,9 +32,9 @@ class command {
 	execute = (app) => {
 		return {
 			embeds: [{
-				title: "TheCodingBot",
+				title: "Octanium Bot",
 				color: app.system.embedColors.blue,
-				description: "TheCodingBot is also made possible by those on the GitHub (thanks!)\nYou can obtain the source code and contribute at [here](https://codingbot.gg/source).",
+				description: "OctaniumBot is also made possible by those on the GitHub (thanks!)\nYou can obtain the source code and contribute at [here](https://github.com/TheOceanBreeze/OctaniumBot).",
 				footer: { text: app.footerText }
 			}]
 		};
