@@ -1,3 +1,4 @@
+/* eslint-sourcetype module */
 //
 // TheCodingBot
 // Netro Corporation

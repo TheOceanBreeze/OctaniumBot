@@ -27,6 +27,5 @@ module.exports = {
 			"error",
 			"always"
 		],
-		"strict": ["warn"]
 	}
 };
