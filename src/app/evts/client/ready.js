@@ -51,6 +51,9 @@ class ready {
 		app.startUp.finishTime = new Date().getTime();
 		const totalTime = (app.startUp.finishTime - app.startUp.startTime);
 		app.log.success("SYSTEM", `Startup finished! It took ${totalTime}ms (${totalTime / 1000}s)!`);
+
+		app.log.debug("SYSTEM", "Setting Bot to Online");
+		app.client.user.setPresence({ status: "online" });
 	};
 }
 

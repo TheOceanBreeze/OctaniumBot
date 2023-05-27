@@ -33,6 +33,7 @@
   },
   "homepage": "https://tcb.netrocorp.net",
   "devDependencies": {
-    "eslint": "^8.41.0"
+    "eslint": "^8.41.0",
+    "eslint-plugin-n": "^16.0.0"
   }
 }

@@ -185,6 +185,17 @@ const start = async(debugMode) => {
 		process.exit(-1);
 	});
 
+	process.on("SIGINT" || "SIGTERM" || "uncaughtException", (err) => {
+		if (err && !"SIGINT" && !"SIGTERM") console.error(err);
+		app.log.debug("SYSTEM", "Starting shutdown procedure");
+		app.log.debug("SYSTEM", "Setting Bot to Status Offline/Invisisble");
+		app.client.user.setPresence({ status: "offline" });
+		app.log.debug("SYSTEM", "Clearing Discord Cache");
+		app.functions.clearCache();
+		app.log.debug("SYSTEM", "Destroying Client");
+		app.client.destroy();
+	});
+
 };
 module.exports = function(debugMode) { return start(debugMode); };
 if (require.main === module) { console.log("\x1b[31mPlease call index.js.\x1b[0m"); }
