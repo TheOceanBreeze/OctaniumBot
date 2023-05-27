@@ -27,7 +27,7 @@ const start = async(debugMode) => {
 		if (!app.dependencies) app.dependencies = {};
 		for (let dep in app.system.dependencies) {
 			const startImport = new Date().getTime();
-			let dependency = app.system.dependencies[dep];
+			let dependency = await app.system.dependencies[dep];
 			try {
 				app.functions.clearCache(dependency.name);
 				app.dependencies[dependency.name] = await require(dependency.name);
@@ -39,7 +39,7 @@ const start = async(debugMode) => {
 				let missingMod = Ex.message.includes("Cannot find module");
 				if (missingMod) { app.log.error("SYSTEM", `Could not import module - ${dependency.name}!`); }
 				else console.log(Ex);
-				if (dependency.required || !missingMod) { process.exit(-1); }
+				if (dependency.required || !missingMod) { process.exitcode = -1; throw new Error("Could not import module: " + Error); }
 			}
 		}
 	}
@@ -180,9 +180,8 @@ const start = async(debugMode) => {
 	// Login now!!
 	app.log.info("DISCORD", "Now logging in...");
 	app.client.login(process.env.BOT_TOKEN).catch((err) => {
-		app.log.error("DISCORD", "Failed to login!");
-		console.log(err);
-		process.exit(-1);
+		process.exitcode = -1;
+		throw new Error("Failed to login to Discord" + err);
 	});
 
 	process.on("SIGINT" || "SIGTERM" || "uncaughtException", (err) => {
