@@ -24,3 +24,6 @@ src/app/cache/*
 # It's quite crazy what funnies I could be hiding
 # but all my funnies won't be just in this file.
 data/601-release.md
+bun.lockb
+flake.lock
+pnpm-lock.yaml
