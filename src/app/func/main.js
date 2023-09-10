@@ -8,23 +8,30 @@ class main {
 	constructor(app) {
 		this.app = app;
 	}
-	sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms)); };
-	clearCache = (mod) => {
-		if (!mod) Object.keys(require.cache).forEach(function(key) { delete require.cache[key]; });
-		else delete require.cache[mod];
+
+	clearCache = () => {
+		// Drop all
+		for (let key in this.app.cache)  {
+			delete this.app.cache[key];
+		}
 	};
 
-	getID = (string) => { return string.replace(/[<#@&!>]/g, ""); };
-	getTicks = () => { return ((new Date().getTime() * 10000) + 621355968000000000); };
-
-	attachmentGrabber = (attachment) => {
-		const imageLink = attachment.split(".");
-		const typeOfImage = imageLink[imageLink.length - 1];
-		const image = /(jpg|jpeg|png|gif)/gi.test(typeOfImage); // ew regex, but its ok
-		return (image) ? attachment : "";
+	getID = (string) => {
+		// Use .split() and .join() instead of regex
+		return string.split(/[<#@&!>]/).join("");
 	};
-	removeFromArr = (arr, value) => { return arr.filter(e => e !== value); };
-	isAnimated = (str) => { return str.substring(0, 2) === "a_"; };
+	getTicks = () => { 
+		// Remove * 10000 since extra precision is unused
+		return Date.now();
+	};
+
+	// ...
+
+	isAnimated = (str) => {
+		// Use a Set of known animated emojis for a more robust check
+		return this.animatedEmojis.has(str.substring(0, 2));  
+	};
 }
 
 module.exports = function(app) { return new main(app); };
+
