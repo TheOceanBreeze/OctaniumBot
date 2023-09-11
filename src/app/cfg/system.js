@@ -38,16 +38,8 @@ module.exports = {
 
 	system: {
 		dependencies: [
-			{ name: "discord.js", required: true },
-			{ name: "node-fetch", required: true },
-			{ name: "dotenv", required: true },
-
-			{ name: "fs", required: true },
 			{ name: "glob", required: true },
-			{ name: "path", required: true },
-			{ name: "util", required: true },
-			
-			{ name: "os", required: true },
+			{ name: "discord.js", required: true },
 		],
 
 		embedColors: {

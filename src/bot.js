@@ -39,7 +39,7 @@ async function start(debugMode, clearCacheCmd) {
 							if (dependency.name == "dotenv") mod.config();
 							app.dependencies[dependency.name] = mod;
 							dependencyCache.set(dependency.name, mod);
-							app.log.info("SYSTEM", `Imported dependency: ${dependency.name}`);
+							app.log.info("SYSTEM", `Imported dependency: ${dependency.name} in ${new Date().getTime() - startTime}ms`);
 						});
 					}
 				})).catch(Ex => {
@@ -61,6 +61,9 @@ async function start(debugMode, clearCacheCmd) {
 		// Move client configuration into a separate function
 		app.log.info("SYSTEM", "Configuring Discord Client...");
 		app.client = new Client({
+			ws: {
+				WebSocket: Bun.WebSocket
+			},
 			intents: [
 				GatewayIntentBits.Guilds,
 				GatewayIntentBits.GuildMessages,
@@ -177,8 +180,15 @@ async function start(debugMode, clearCacheCmd) {
 		app.client.user.setPresence({ status: "offline" });
 		app.log.debug("SYSTEM", "Destroying Client");
 		// eslint-disable-next-line n/no-process-exit
-		try { app.client.destroy(); } catch { console.log("Failed to destroy Client. Crashing manually." + err) && process.exit(1); }
+		app.client.destroy().catch(err => {if (err.code === "ABORT_ERR") console.error("The Websocket was aborted"); else console.error("Failed to destroy Client. Crashing manually." + err); });
 		app.log.debug("SYSTEM", "Goodbye!");
+		return;
+	});
+
+	process.on("unhandledRejection", (reason, promise) => {
+		console.error("Unhandled Rejection:", reason);
+		console.log("Promise:", promise);
+		// You can optionally handle or log the unhandled rejection here
 	});
 
 }
